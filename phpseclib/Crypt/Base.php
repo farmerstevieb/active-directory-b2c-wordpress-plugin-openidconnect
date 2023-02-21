@@ -660,7 +660,7 @@ class Crypt_Base
                         if (!class_exists('Crypt_Hash')) {
                             include_once 'Crypt/Hash.php';
                         }
-                        $hashObj = new Crypt_Hash();
+                        $hashObj = new Crypt_Hash_Method();
                         $hashObj->setHash($hash);
                         if ($dkLen > $hashObj->getLength()) {
                             user_error('Derived key too long');
@@ -685,7 +685,7 @@ class Crypt_Base
                         }
                         $i = 1;
                         while (strlen($key) < $dkLen) {
-                            $hmac = new Crypt_Hash();
+                            $hmac = new Crypt_Hash_Method();
                             $hmac->setHash($hash);
                             $hmac->setKey($password);
                             $f = $u = $hmac->hash($salt . pack('N', $i++));

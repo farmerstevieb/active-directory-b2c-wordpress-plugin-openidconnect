@@ -20,7 +20,7 @@
  * <?php
  *    include 'Crypt/Hash.php';
  *
- *    $hash = new Crypt_Hash('sha1');
+ *    $hash = new Crypt_Hash_Method('sha1');
  *
  *    $hash->setKey('abcdefg');
  *
@@ -56,7 +56,7 @@
 
 /**#@+
  * @access private
- * @see self::Crypt_Hash()
+ * @see self::Crypt_Hash_Method()
  */
 /**
  * Toggles the internal implementation
@@ -151,7 +151,7 @@ class Crypt_Hash
      * @return Crypt_Hash
      * @access public
      */
-    function Crypt_Hash($hash = 'sha1')
+    function Crypt_Hash_Method($hash = 'sha1')
     {
         if (!defined('CRYPT_HASH_MODE')) {
             switch (true) {

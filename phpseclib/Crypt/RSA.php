@@ -10,7 +10,7 @@
  * <?php
  *    include 'Crypt/RSA.php';
  *
- *    $rsa = new Crypt_RSA();
+ *    $rsa = new Crypt_RSA_Method();
  *    extract($rsa->createKey());
  *
  *    $plaintext = 'terrafrost';
@@ -28,7 +28,7 @@
  * <?php
  *    include 'Crypt/RSA.php';
  *
- *    $rsa = new Crypt_RSA();
+ *    $rsa = new Crypt_RSA_Method();
  *    extract($rsa->createKey());
  *
  *    $plaintext = 'terrafrost';
@@ -168,7 +168,7 @@ define('CRYPT_RSA_ASN1_SEQUENCE',   48);
 
 /**#@+
  * @access private
- * @see self::Crypt_RSA()
+ * @see self::Crypt_RSA_Method()
  */
 /**
  * To use the pure-PHP implementation
@@ -491,7 +491,7 @@ class Crypt_RSA
      * @return Crypt_RSA
      * @access public
      */
-    function Crypt_RSA()
+    function Crypt_RSA_Method()
     {
         if (!class_exists('Math_BigInteger')) {
             include_once 'BigInteger.php';
@@ -554,10 +554,10 @@ class Crypt_RSA
         $this->zero = new Math_BigInteger();
         $this->one = new Math_BigInteger(1);
 
-        $this->hash = new Crypt_Hash('sha1');
+        $this->hash = new Crypt_Hash_Method('sha1');
         $this->hLen = $this->hash->getLength();
         $this->hashName = 'sha1';
-        $this->mgfHash = new Crypt_Hash('sha1');
+        $this->mgfHash = new Crypt_Hash_Method('sha1');
         $this->mgfHLen = $this->mgfHash->getLength();
     }
 
@@ -861,7 +861,7 @@ class Crypt_RSA
                 if (!class_exists('Crypt_Hash')) {
                     include_once 'Crypt/Hash.php';
                 }
-                $hash = new Crypt_Hash('sha1');
+                $hash = new Crypt_Hash_Method('sha1');
                 $hash->setKey(pack('H*', sha1($hashkey)));
                 $key.= 'Private-MAC: ' . bin2hex($hash->hash($source)) . "\r\n";
 
@@ -1597,10 +1597,10 @@ class Crypt_RSA
             $this->comment = $key->comment;
 
             if (is_object($key->hash)) {
-                $this->hash = new Crypt_Hash($key->hash->getHash());
+                $this->hash = new Crypt_Hash_Method($key->hash->getHash());
             }
             if (is_object($key->mgfHash)) {
-                $this->mgfHash = new Crypt_Hash($key->mgfHash->getHash());
+                $this->mgfHash = new Crypt_Hash_Method($key->mgfHash->getHash());
             }
 
             if (is_object($key->modulus)) {
@@ -1790,7 +1790,7 @@ class Crypt_RSA
             return true;
         }
 
-        $rsa = new Crypt_RSA();
+        $rsa = new Crypt_RSA_Method();
         if (!$rsa->loadKey($key, $type)) {
             return false;
         }
@@ -1851,7 +1851,7 @@ class Crypt_RSA
 
         switch ($algorithm) {
             case 'sha256':
-                $hash = new Crypt_Hash('sha256');
+                $hash = new Crypt_Hash_Method('sha256');
                 $base = base64_encode($hash->hash($RSAPublicKey));
                 return substr($base, 0, strlen($base) - 1);
             case 'md5':
@@ -1933,7 +1933,7 @@ class Crypt_RSA
      */
     function __clone()
     {
-        $key = new Crypt_RSA();
+        $key = new Crypt_RSA_Method();
         $key->loadKey($this);
         return $key;
     }
@@ -2065,11 +2065,11 @@ class Crypt_RSA
             case 'sha256':
             case 'sha384':
             case 'sha512':
-                $this->hash = new Crypt_Hash($hash);
+                $this->hash = new Crypt_Hash_Method($hash);
                 $this->hashName = $hash;
                 break;
             default:
-                $this->hash = new Crypt_Hash('sha1');
+                $this->hash = new Crypt_Hash_Method('sha1');
                 $this->hashName = 'sha1';
         }
         $this->hLen = $this->hash->getLength();
@@ -2094,10 +2094,10 @@ class Crypt_RSA
             case 'sha256':
             case 'sha384':
             case 'sha512':
-                $this->mgfHash = new Crypt_Hash($hash);
+                $this->mgfHash = new Crypt_Hash_Method($hash);
                 break;
             default:
-                $this->mgfHash = new Crypt_Hash('sha1');
+                $this->mgfHash = new Crypt_Hash_Method('sha1');
         }
         $this->mgfHLen = $this->mgfHash->getLength();
     }

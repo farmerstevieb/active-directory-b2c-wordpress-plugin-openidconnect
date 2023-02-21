@@ -332,7 +332,7 @@ class System_SSH_Agent
                     if (!class_exists('Crypt_RSA')) {
                         include_once 'Crypt/RSA.php';
                     }
-                    $key = new Crypt_RSA();
+                    $key = new Crypt_RSA_Method();
                     $key->loadKey($key_str);
                     break;
                 case 'ssh-dss':

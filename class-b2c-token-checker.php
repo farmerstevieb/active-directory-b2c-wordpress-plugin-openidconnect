@@ -8,13 +8,19 @@ use \Firebase\JWT\JWT;
  */
 class B2C_Token_Checker {
 	
-	private $id_token_array = array(); // still encoded
-	private $head = array(); // decoded
-	private $payload = array(); // decoded
-	private $clientID = '';
-	private $endpoint_handler; 
-	
-	function __construct($id_token, $clientID, $policy_name) {
+	private array $id_token_array = array(); // still encoded
+	private array $head = array(); // decoded
+	private array $payload = array(); // decoded
+	private string $clientID = '';
+	private B2C_Endpoint_Handler $endpoint_handler;
+
+    /**
+     * @param string $id_token
+     * @param string $clientID
+     * @param string $policy_name
+     *@throws Exception
+     */
+    function __construct(string $id_token, string $clientID, string $policy_name) {
 		
 		$this->clientID = $clientID;
 		$this->endpoint_handler = new B2C_Endpoint_Handler($policy_name);
@@ -24,8 +30,11 @@ class B2C_Token_Checker {
 	/** 
 	 * Converts base64url encoded string into base64 encoded string.
 	 * Also adds the necessary padding to the base64 encoded string.
+     * @param string $data
+     * @return string
 	 */
-	private function convert_base64url_to_base64($data) {
+	private function convert_base64url_to_base64(string $data): string
+    {
 		return str_pad(strtr($data, '-_', '+/'), strlen($data) % 4, '=', STR_PAD_RIGHT);
 	}
 	
@@ -42,8 +51,10 @@ class B2C_Token_Checker {
 	
 	/** 
 	 * Validates the RSA signature on the token.
+     * @return bool
 	 */
-	private function validate_signature() {
+	private function validate_signature(): bool
+    {
 		
 		//require_once "phpseclib/Crypt/RSA.php";
 		
@@ -98,8 +109,10 @@ class B2C_Token_Checker {
 	
 	/**
 	 * Validates audience, not_before, expiration_time, and issuer claims.
+     * @return bool
 	 */
-	private function validate_claims() {
+	private function validate_claims(): bool
+    {
 		
 		$audience = $this->payload['aud']; // Should be app's clientID
 		if ($audience != $this->clientID) {
@@ -125,16 +138,18 @@ class B2C_Token_Checker {
 		
 		return true;
 	}
-	
-	/** 
-	 * Verifies both the signature and claims of the ID token.
-	 */
-	public function authenticate() {
+
+    /**
+     * Verifies both the signature and claims of the ID token.
+     * @return bool
+     */
+	public function authenticate(): bool
+    {
 		
-		if ($this->validate_signature() == false) {
+		if (!$this->validate_signature()) {
 			return false;
 		}
-		if ($this->validate_claims() == false) {
+		if (!$this->validate_claims()) {
 			return false;
 		}
 		return true;
@@ -142,9 +157,13 @@ class B2C_Token_Checker {
 	
 	/** 
 	 * Extracts a claim from the ID token.
-	 */
-	public function get_claim($name) {
-		return $this->payload[$name];
+     * @param string $name
+     * @return string|null
+     */
+	public function get_claim(string $name): ?string
+    {
+        return $this->payload[$name] ?? null;
+
 	}
 }
 

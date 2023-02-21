@@ -30,5 +30,3 @@ function autoload($class) {
  * Registers the autoloader.
  */
 spl_autoload_register('autoload');
-
-?>

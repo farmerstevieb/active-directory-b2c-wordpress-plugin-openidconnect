@@ -25,7 +25,7 @@
  *    include 'Crypt/RSA.php';
  *    include 'Net/SSH2.php';
  *
- *    $key = new Crypt_RSA();
+ *    $key = new Crypt_RSA_Method();
  *    //$key->setPassword('whatever');
  *    $key->loadKey(file_get_contents('privatekey'));
  *
@@ -1470,10 +1470,10 @@ class Net_SSH2
 
         switch ($kex_algorithm) {
             case 'diffie-hellman-group-exchange-sha256':
-                $kexHash = new Crypt_Hash('sha256');
+                $kexHash = new Crypt_Hash_Method('sha256');
                 break;
             default:
-                $kexHash = new Crypt_Hash('sha1');
+                $kexHash = new Crypt_Hash_Method('sha1');
         }
 
         /* To increase the speed of the key exchange, both client and server may
@@ -1810,23 +1810,23 @@ class Net_SSH2
         $createKeyLength = 0; // ie. $mac_algorithm == 'none'
         switch ($mac_algorithm) {
             case 'hmac-sha2-256':
-                $this->hmac_create = new Crypt_Hash('sha256');
+                $this->hmac_create = new Crypt_Hash_Method('sha256');
                 $createKeyLength = 32;
                 break;
             case 'hmac-sha1':
-                $this->hmac_create = new Crypt_Hash('sha1');
+                $this->hmac_create = new Crypt_Hash_Method('sha1');
                 $createKeyLength = 20;
                 break;
             case 'hmac-sha1-96':
-                $this->hmac_create = new Crypt_Hash('sha1-96');
+                $this->hmac_create = new Crypt_Hash_Method('sha1-96');
                 $createKeyLength = 20;
                 break;
             case 'hmac-md5':
-                $this->hmac_create = new Crypt_Hash('md5');
+                $this->hmac_create = new Crypt_Hash_Method('md5');
                 $createKeyLength = 16;
                 break;
             case 'hmac-md5-96':
-                $this->hmac_create = new Crypt_Hash('md5-96');
+                $this->hmac_create = new Crypt_Hash_Method('md5-96');
                 $createKeyLength = 16;
         }
 
@@ -1840,27 +1840,27 @@ class Net_SSH2
         $this->hmac_size = 0;
         switch ($mac_algorithm) {
             case 'hmac-sha2-256':
-                $this->hmac_check = new Crypt_Hash('sha256');
+                $this->hmac_check = new Crypt_Hash_Method('sha256');
                 $checkKeyLength = 32;
                 $this->hmac_size = 32;
                 break;
             case 'hmac-sha1':
-                $this->hmac_check = new Crypt_Hash('sha1');
+                $this->hmac_check = new Crypt_Hash_Method('sha1');
                 $checkKeyLength = 20;
                 $this->hmac_size = 20;
                 break;
             case 'hmac-sha1-96':
-                $this->hmac_check = new Crypt_Hash('sha1-96');
+                $this->hmac_check = new Crypt_Hash_Method('sha1-96');
                 $checkKeyLength = 20;
                 $this->hmac_size = 12;
                 break;
             case 'hmac-md5':
-                $this->hmac_check = new Crypt_Hash('md5');
+                $this->hmac_check = new Crypt_Hash_Method('md5');
                 $checkKeyLength = 16;
                 $this->hmac_size = 16;
                 break;
             case 'hmac-md5-96':
-                $this->hmac_check = new Crypt_Hash('md5-96');
+                $this->hmac_check = new Crypt_Hash_Method('md5-96');
                 $checkKeyLength = 16;
                 $this->hmac_size = 12;
         }
@@ -4161,7 +4161,7 @@ class Net_SSH2
                     include_once 'Crypt/RSA.php';
                 }
 
-                $rsa = new Crypt_RSA();
+                $rsa = new Crypt_RSA_Method();
                 $rsa->setSignatureMode(CRYPT_RSA_SIGNATURE_PKCS1);
                 $rsa->loadKey(array('e' => $e, 'n' => $n), CRYPT_RSA_PUBLIC_FORMAT_RAW);
                 if (!$rsa->verify($this->exchange_hash, $signature)) {

@@ -1349,7 +1349,7 @@ class Net_SSH1
             include_once 'Crypt/RSA.php';
         }
 
-        $rsa = new Crypt_RSA();
+        $rsa = new Crypt_RSA_Method();
         $rsa->loadKey($key, CRYPT_RSA_PUBLIC_FORMAT_RAW);
         $rsa->setEncryptionMode(CRYPT_RSA_ENCRYPTION_PKCS1);
         return $rsa->encrypt($m);
